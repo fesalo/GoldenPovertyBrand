@@ -1,0 +1,39 @@
+### Symfony ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+
+### PHPUnit ###
+/phpunit.xml
+.phpunit.result.cache
+
+### Symfony PHPUnit Bridge ###
+.phpunit.result.cache
+/phpunit.xml
+
+### Symfony Asset Mapper ###
+/public/assets/
+/assets/vendor/
+/public/build/
+
+### Logs, cachés y temporales ###
+*.log
+*.cache
+*.tmp
+*.swp
+*.bak
+
+### IDEs ###
+.idea/
+.vscode/
+
+### OS ###
+.DS_Store
+Thumbs.db
+
+### Test Coverage ###
+/coverage/
