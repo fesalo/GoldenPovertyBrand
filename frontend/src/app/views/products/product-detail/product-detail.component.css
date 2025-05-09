@@ -1,0 +1,25 @@
+/* Estilos personalizados para la vista de detalle */
+
+#product-detail .btn {
+  transition: all 0.2s ease-in-out;
+}
+
+#product-detail .btn:hover {
+  transform: translateY(-2px);
+}
+
+#product-detail .card {
+  transition: transform 0.2s;
+}
+
+#product-detail .card:hover {
+  transform: scale(1.02);
+}
+
+#product-detail ul {
+  padding-left: 0;
+}
+
+#product-detail li {
+  margin-bottom: 0.5rem;
+}

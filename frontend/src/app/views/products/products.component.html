@@ -1,0 +1,44 @@
+<section id="products" class="py-5 text-light">
+  <div class="container">
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-4">
+      <div>
+        <h2 class="h3 fw-bold text-dark mb-2">Ropa Exclusiva</h2>
+        <p class="text-dark">Sólo existen 50 unidades por prenda. Calidad y estilo único.</p>
+      </div>
+      <div class="mt-3 mt-sm-0 d-flex align-items-center gap-2">
+        <button class="btn btn-outline filter" (click)="toggleFilters()">
+          <i class="bi bi-funnel"></i> Filtros
+        </button>
+        <div class="input-group">
+          <select class="form-select bg-dark text-light border-secondary" (change)="onSortChange($event)">
+            <option value="">- Ordenar -</option>
+            @for(option of sortOptions; track $index){
+            <option [value]="option.id">{{ option.name }}</option>
+            }
+          </select>
+        </div>
+      </div>
+    </div>
+
+    @if(showFilters) {
+    <app-filter
+    [categories]="categories"
+    (onSelectedCategories)="onSelectedCategories($event)"
+    ></app-filter>
+    }
+
+    <div class="row">
+      @for(product of sortedProducts; track $index){
+      <div class="col-lg-4 col-md-4 col-sm-12 mb-4">
+        <app-card [id]="product.id" [name]="product.name" [price]="product.price" [description]="product.description"
+          [category]="product.category" [image]="product.image" [rating]="product.rating">
+        </app-card>
+      </div>
+      }
+    </div>
+
+    <div class="text-center mt-4">
+      <button class="btn btn-primary px-4 py-2">Ver todos los productos</button>
+    </div>
+  </div>
+</section>

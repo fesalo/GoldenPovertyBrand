@@ -1,0 +1,17 @@
+/* Personalización opcional para mejorar la presentación */
+.card {
+  border-radius: 0.75rem;
+}
+
+.btn-outline-secondary {
+  border: none;
+}
+
+.btn-outline-danger {
+  border: none;
+}
+
+img {
+  max-width: 100%;
+  border-radius: 0.5rem;
+}

@@ -1,0 +1,66 @@
+/* FOOTER GOLDEN POVERTY STYLE */
+
+footer {
+  background-color:  #1a1a1a;
+  color: #d6d6d6;
+  font-family: 'Montserrat', sans-serif;
+}
+
+h5,
+h6 {
+  color:  #CCAB62;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+}
+
+p,
+a,
+li {
+  color: #d6d6d6;
+  font-size: 0.9rem;
+}
+
+a:hover {
+  color:  #CCAB62;
+  text-decoration: underline;
+}
+
+.bi {
+  font-size: 1.2rem;
+  color: #d6d6d6;
+  transition: color 0.3s;
+}
+
+.bi:hover {
+  color:  #CCAB62;
+}
+
+input[type="email"] {
+  background-color: #2a2a2a;
+  border: none;
+  color: #fff;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+}
+
+input[type="email"]::placeholder {
+  color: #888;
+}
+
+button.btn-primary {
+  background-color:  #CCAB62;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+button.btn-primary:hover {
+  background-color: #e6c674;
+}
+
+.fw-bold,
+.fw-semibold {
+  font-weight: 600;
+}

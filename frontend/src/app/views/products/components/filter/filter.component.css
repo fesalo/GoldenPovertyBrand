@@ -1,0 +1,23 @@
+.btn-group .btn {
+  background-color: transparent;
+  color: #000000;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  margin-right: 0.5rem;
+  padding: 0.5rem 1rem;
+}
+
+.btn-group .btn:hover {
+  background-color: #d4b163;
+  color: #fff;
+}
+
+.btn-group .btn.active {
+  background-color: #d4b163;
+  color: #fff;
+}
+
+.btn-group input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+}

@@ -1,0 +1,14 @@
+<div class="mb-4 p-4 bg-secondary bg-opacity-10 border border-secondary rounded">
+  <div class="mb-3">
+    <h5 class="text-dark">Categorías</h5>
+    <div class="btn-group " name="categories">
+      @for (category of categories; track $index) {
+      <label class="btn btn-outline" [class.active]="isSelected(category.id)"
+        (click)="toggleCategory(category.id)">
+        <input type="checkbox" [checked]="isSelected(category.id)" disabled style="pointer-events: none;">
+        {{ category.name }}
+      </label>
+
+      }
+    </div>
+  </div>

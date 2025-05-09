@@ -1,0 +1,8 @@
+/* Opcional: personalización adicional */
+section#contact {
+  background-color: #ffffff;
+}
+
+textarea {
+  resize: none;
+}
