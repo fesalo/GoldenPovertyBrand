@@ -91,7 +91,6 @@ export class ProductsComponent {
   selectedCategories: number[] = [0];
   sortOption?: number = 0;
   showFilters: boolean = false;
-  priceRange: [number, number] = [0, 100];
 
   get filteredProducts(): Product[] {
     let filtered =
@@ -100,10 +99,6 @@ export class ProductsComponent {
         : this.products.filter(product =>
           this.selectedCategories.includes(product.category)
         );
-
-    filtered = filtered.filter(product =>
-      product.price >= this.priceRange[0] && product.price <= this.priceRange[1]
-    );
 
     return filtered;
   }
@@ -145,7 +140,4 @@ export class ProductsComponent {
     this.sortOption = optionId;
   }
 
-  setPriceRange(value: number): void {
-    this.priceRange = [this.priceRange[0], value];
-  }
 }
