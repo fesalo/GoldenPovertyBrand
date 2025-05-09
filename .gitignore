@@ -1,0 +1,20 @@
+# Archivos del sistema / IDE
+.idea/
+.vscode/
+*.log
+*.cache
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Node (para frontend moderno)
+node_modules/
+dist/
+build/
+*.local
+.env
+
+# Archivos específicos de desarrollo
+*.bak
+*.swp
+*.swo
