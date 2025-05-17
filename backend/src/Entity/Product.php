@@ -38,12 +38,6 @@ class Product
     private ?category $category = null;
 
     /**
-     * @var Collection<int, Size>
-     */
-    #[ORM\OneToMany(targetEntity: Size::class, mappedBy: 'product')]
-    private Collection $sizes;
-
-    /**
      * @var Collection<int, Image>
      */
     #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'product')]
@@ -52,17 +46,10 @@ class Product
     #[ORM\ManyToOne]
     private ?image $frontImage = null;
 
-    /**
-     * @var Collection<int, color>
-     */
-    #[ORM\ManyToMany(targetEntity: color::class, inversedBy: 'products')]
-    private Collection $colors;
 
     public function __construct()
     {
-        $this->sizes = new ArrayCollection();
         $this->images = new ArrayCollection();
-        $this->colors = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -143,36 +130,6 @@ class Product
     }
 
     /**
-     * @return Collection<int, Size>
-     */
-    public function getSizes(): Collection
-    {
-        return $this->sizes;
-    }
-
-    public function addSize(Size $size): static
-    {
-        if (!$this->sizes->contains($size)) {
-            $this->sizes->add($size);
-            $size->setProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSize(Size $size): static
-    {
-        if ($this->sizes->removeElement($size)) {
-            // set the owning side to null (unless already changed)
-            if ($size->getProduct() === $this) {
-                $size->setProduct(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, Image>
      */
     public function getImages(): Collection
@@ -214,27 +171,4 @@ class Product
         return $this;
     }
 
-    /**
-     * @return Collection<int, color>
-     */
-    public function getColors(): Collection
-    {
-        return $this->colors;
-    }
-
-    public function addColor(color $color): static
-    {
-        if (!$this->colors->contains($color)) {
-            $this->colors->add($color);
-        }
-
-        return $this;
-    }
-
-    public function removeColor(color $color): static
-    {
-        $this->colors->removeElement($color);
-
-        return $this;
-    }
 }
