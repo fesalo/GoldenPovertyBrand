@@ -7,6 +7,7 @@ import { DropsComponent } from './views/drops/drops.component';
 import { NewsComponent } from './views/news/news.component';
 import { ProductsComponent } from './views/products/products.component';
 import { ProductDetailComponent } from './views/products/product-detail/product-detail.component';
+import { CreateProductComponent } from './views/products/create-product/create-product.component';
 
 
 export const routes: Routes = [
@@ -18,5 +19,6 @@ export const routes: Routes = [
   { path: 'news', component: NewsComponent },
   { path: 'products', component: ProductsComponent },
   { path: 'producto/:id', component: ProductDetailComponent },
+  { path: 'create-product', component:CreateProductComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];

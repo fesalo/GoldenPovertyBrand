@@ -4,14 +4,12 @@ export interface Product {
   description: string;
   price: number;
   category: number;
-  image: string;
-  sizes?: string[];
+  images: string[];
+  frontImage:string;
+  sizes: string[];
   colors?: string[];
-  stock?: number;
-  isNew?: boolean;
-  isPopular?: boolean;
-  createdAt?: Date;
-  rating: number;
+  stock: number;
+  createdAt?: string;
 }
 
 export interface Category {

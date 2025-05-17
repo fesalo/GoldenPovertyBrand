@@ -1,15 +1,7 @@
 import { Component } from '@angular/core';
-
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  rating: number;
-  stock: number;
-  category: string;
-  imageUrl: string;
-}
+import { ProductStateService } from '../../../core/services/product-state.service';
+import { Product } from '../../../core/models/product.model';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-product-detail',
@@ -19,55 +11,20 @@ interface Product {
   styleUrl: './product-detail.component.css'
 })
 export class ProductDetailComponent {
+
+  constructor(public service: ProductStateService, private route: ActivatedRoute) { }
+
   product: Product | null = null;
-  relatedProducts: Product[] = [
-    {
-      id: 1,
-      name: 'Classic Denim Jacket',
-      description: 'A timeless piece with modern design and excellent quality.',
-      price: 89.99,
-      rating: 4.5,
-      stock: 12,
-      category: 'Jackets',
-      imageUrl: 'https://via.placeholder.com/500x500'
-    }
-  ];
+  relatedProducts: Product[] = [];
 
   ngOnInit(): void {
-    // Simulación de producto
-    this.product = {
-      id: 1,
-      name: 'Classic Denim Jacket',
-      description: 'A timeless piece with modern design and excellent quality.',
-      price: 89.99,
-      rating: 4.5,
-      stock: 12,
-      category: 'Jackets',
-      imageUrl: 'https://via.placeholder.com/500x500'
-    };
+   const id = Number(this.route.snapshot.paramMap.get('id'));
+    const storedProduct = this.service.getProduct();
 
-    // Simulación de productos relacionados
-    this.relatedProducts = [
-      {
-        id: 2,
-        name: 'Slim Fit Jeans',
-        description: 'Perfect match for your jacket.',
-        price: 59.99,
-        rating: 4.2,
-        stock: 25,
-        category: 'Jeans',
-        imageUrl: 'https://via.placeholder.com/300x300'
-      },
-      {
-        id: 3,
-        name: 'Leather Boots',
-        description: 'Stylish and durable boots.',
-        price: 120.00,
-        rating: 4.8,
-        stock: 8,
-        category: 'Footwear',
-        imageUrl: 'https://via.placeholder.com/300x300'
-      }
-    ];
+    if (storedProduct && storedProduct.id === id) {
+      this.product = storedProduct;
+    }
+
   }
+
 }

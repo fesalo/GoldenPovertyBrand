@@ -1,8 +1,10 @@
-import { NgClass } from '@angular/common';
 import { Component } from '@angular/core';
-import { NgModel } from '@angular/forms';
 import { Product, Category } from '../../core/models/product.model';
 import { CardComponent, FilterComponent } from './components';
+import { ProductStateService } from '../../core/services/product-state.service';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { ProductService } from '../../core/services/product.service';
 
 interface SortOption {
   id: number;
@@ -17,6 +19,13 @@ interface SortOption {
   styleUrls: ['./products.component.css']
 })
 export class ProductsComponent {
+
+  /* public isAdmin$!: Observable<boolean>; */
+  public isAdmin: boolean = true;
+
+
+  constructor(private router: Router, public service: ProductService) { }
+
   products: Product[] = [
     {
       id: 1,
@@ -24,54 +33,60 @@ export class ProductsComponent {
       price: 29.99,
       description: 'Comfortable cotton t-shirt for everyday wear',
       category: 1,
-      image: '',
-      rating: 4.5,
+      images: [''],
+      frontImage: '',
+      sizes: ['S', 'M'],
+      colors: ['red', 'green'],
+      stock: 2,
     },
     {
       id: 2,
-      name: 'Premium Hoodie',
-      price: 59.99,
-      description: 'Warm and stylish hoodie for cold days',
+      name: 'Slim Fit Jeans',
+      price: 49.99,
+      description: 'Stylish slim fit jeans with stretchable fabric',
       category: 2,
-      image: '',
-      rating: 4.8,
+      images: [''],
+      frontImage: '',
+      sizes: ['M', 'L'],
+      colors: ['blue', 'black'],
+      stock: 5,
     },
     {
       id: 3,
-      name: 'Sport Cap',
-      price: 19.99,
-      description: 'Lightweight cap with adjustable strap',
-      category: 3,
-      image: '',
-      rating: 4.2,
+      name: 'Hooded Sweatshirt',
+      price: 39.99,
+      description: 'Warm and cozy hoodie for cool weather',
+      category: 1,
+      images: [''],
+      frontImage: '',
+      sizes: ['L', 'XL'],
+      colors: ['gray', 'navy'],
+      stock: 3,
     },
     {
       id: 4,
-      name: 'Slim Fit Jeans',
-      price: 49.99,
-      description: 'Modern slim fit jeans with stretch fabric',
+      name: 'Summer Dress',
+      price: 34.99,
+      description: 'Lightweight dress perfect for summer days',
       category: 3,
-      image: '',
-      rating: 4.6,
+      images: [''],
+      frontImage: '',
+      sizes: ['S', 'M', 'L'],
+      colors: ['yellow', 'pink'],
+      stock: 4,
     },
     {
       id: 5,
-      name: 'Graphic T-Shirt',
-      price: 34.99,
-      description: 'Unique graphic print on premium cotton',
-      category: 1,
-      image: '',
-      rating: 4.3,
-    },
-    {
-      id: 6,
-      name: 'Winter Jacket',
-      price: 89.99,
-      description: 'Warm insulated jacket for winter',
-      category: 3,
-      image: '',
-      rating: 4.7,
-    },
+      name: 'Running Shoes',
+      price: 59.99,
+      description: 'Comfortable and durable shoes for running',
+      category: 4,
+      images: [''],
+      frontImage: '',
+      sizes: ['38', '39', '40'],
+      colors: ['white', 'black'],
+      stock: 6,
+    }
   ];
 
   categories: Category[] = [
@@ -145,7 +160,14 @@ export class ProductsComponent {
     this.sortOption = optionId;
   }
 
-  setPriceRange(value: number): void {
-    this.priceRange = [this.priceRange[0], value];
+  public addProduct(): void {
+    this.router.navigate(['/create-product']);
+  }
+
+  public deleteProduct(id: number): void {
+    this.products = this.products.filter((producto) => producto.id !== id);
+    this.service.deleteProduct(id).subscribe(() => {
+      this.products = this.products.filter(producto => producto.id !== id);
+    });
   }
 }

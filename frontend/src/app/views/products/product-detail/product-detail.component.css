@@ -1,25 +1,27 @@
-/* Estilos personalizados para la vista de detalle */
-
-#product-detail .btn {
+.btn {
+  background-color: #CCAB62;
   transition: all 0.2s ease-in-out;
 }
 
-#product-detail .btn:hover {
+.btn:hover {
   transform: translateY(-2px);
+  background-color: #957635;
 }
 
-#product-detail .card {
+.card {
   transition: transform 0.2s;
+  border-radius: 12px;
 }
 
-#product-detail .card:hover {
+.card:hover {
   transform: scale(1.02);
 }
 
-#product-detail ul {
+ul {
   padding-left: 0;
 }
 
-#product-detail li {
+li {
   margin-bottom: 0.5rem;
 }
+
