@@ -33,9 +33,6 @@ class Product
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $creationDate = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $color = null;
-
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
     private ?category $category = null;
@@ -55,10 +52,17 @@ class Product
     #[ORM\ManyToOne]
     private ?image $frontImage = null;
 
+    /**
+     * @var Collection<int, color>
+     */
+    #[ORM\ManyToMany(targetEntity: color::class, inversedBy: 'products')]
+    private Collection $colors;
+
     public function __construct()
     {
         $this->sizes = new ArrayCollection();
         $this->images = new ArrayCollection();
+        $this->colors = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -122,18 +126,6 @@ class Product
     public function setCreationDate(\DateTime $creationDate): static
     {
         $this->creationDate = $creationDate;
-
-        return $this;
-    }
-
-    public function getColor(): ?string
-    {
-        return $this->color;
-    }
-
-    public function setColor(string $color): static
-    {
-        $this->color = $color;
 
         return $this;
     }
@@ -218,6 +210,30 @@ class Product
     public function setFrontImage(?image $frontImage): static
     {
         $this->frontImage = $frontImage;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, color>
+     */
+    public function getColors(): Collection
+    {
+        return $this->colors;
+    }
+
+    public function addColor(color $color): static
+    {
+        if (!$this->colors->contains($color)) {
+            $this->colors->add($color);
+        }
+
+        return $this;
+    }
+
+    public function removeColor(color $color): static
+    {
+        $this->colors->removeElement($color);
 
         return $this;
     }
