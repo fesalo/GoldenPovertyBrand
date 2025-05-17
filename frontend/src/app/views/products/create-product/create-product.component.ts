@@ -23,32 +23,61 @@ export class CreateProductComponent {
     description: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
     price: new FormControl<number | null>(null),
     stock: new FormControl<number | null>(null),
-    usuario: new FormControl<number>(1, { nonNullable: true, validators: [Validators.required] }),
-    foto: new FormControl<string | null>(null, { nonNullable: true, validators: [Validators.required] }),
+    frontImage: new FormControl<string | null>(null, { nonNullable: true, validators: [Validators.required] }),
+    additionalPhotos: new FormControl<string[]>([], { nonNullable: true })  // nuevo campo para fotos adicionales
   });
+
+  public newFoto: string = ''
+  public additionalPhotos: string[] = []; // array para almacenar fotos adicionales en base64
 
   constructor(
     private router: Router,
     private productService: ProductService
   ) { }
 
-  public newFoto: string = ''
-
-  public onFileChange(event: Event) {
+  public onFileChange(event: Event, multiple: boolean = false) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      const file = input.files[0];
-      const reader = new FileReader();
+      if (!multiple) {
+        // Solo 1 foto (frontImage)
+        const file = input.files[0];
+        const reader = new FileReader();
 
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        const base64String = reader.result as string;
-        this.newFoto = base64String.split(',')[1]
-      };
-      reader.onerror = (error) => {
-        console.error('Error al leer la imagen:', error);
-      };
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          const base64String = reader.result as string;
+          this.newFoto = base64String.split(',')[1];
+          this.productForm.controls['frontImage'].setValue(this.newFoto);
+        };
+        reader.onerror = (error) => {
+          console.error('Error al leer la imagen:', error);
+        };
+      } else {
+        // Fotos adicionales múltiples
+        this.additionalPhotos = []; // limpiamos array
+        const files = Array.from(input.files);
+        files.forEach((file) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = () => {
+            const base64String = reader.result as string;
+            this.additionalPhotos.push(base64String.split(',')[1]);
+            this.productForm.controls['additionalPhotos'].setValue(this.additionalPhotos);
+          };
+          reader.onerror = (error) => {
+            console.error('Error al leer la imagen:', error);
+          };
+        });
+      }
     }
+  }
+
+  public removeAdditionalPhoto(index: number) {
+
+    this.additionalPhotos.splice(index, 1);
+
+    this.productForm.controls['additionalPhotos'].setValue(this.additionalPhotos);
+
   }
 
   public onSubmit() {
@@ -60,6 +89,7 @@ export class CreateProductComponent {
         stock: Number(this.productForm.value.stock) || 0,
         usuario: 1,
         foto: this.newFoto,
+        additionalPhotos: this.additionalPhotos, // añadimos fotos adicionales al payload
       };
 
       console.log('Enviando payload:', payload);
@@ -80,6 +110,6 @@ export class CreateProductComponent {
   }
 
   public cancelar() {
-    this.router.navigate(['/productos']);
+    this.router.navigate(['/home']);
   }
 }
