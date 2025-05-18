@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+/* import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { Product, ProductFilter } from '../models/product.model';
@@ -13,7 +13,7 @@ export class ProductService {
   constructor() {}
 
   public createProduct(producto: Product): void {
-    /* const payload = {
+    const payload = {
       nombre: producto.nombre,
       descripcion: producto.descripcion,
       precio: producto.precio,
@@ -31,10 +31,10 @@ export class ProductService {
         console.log('Cuerpo del error:', error.error);
         throw error;
       })
-    ); */
+    );
   }
 
-  /* getProducts(filter?: ProductFilter): Observable<Product[]> {
+  getProducts(filter?: ProductFilter): Observable<Product[]> {
     let filteredProducts = [...this.products];
 
     // Apply filters
@@ -82,16 +82,16 @@ export class ProductService {
     }
 
     return of(filteredProducts).pipe(delay(500)); // Simulate network delay
-  } */
+  }
 
-  /* getProductById(id: string): Observable<Product | undefined> {
+  getProductById(id: string): Observable<Product | undefined> {
     const product = this.products.find(p => p.id === id);
     return of(product).pipe(delay(300)); // Simulate network delay
   }
- */
 
 
-  /* updateProduct(id: string, product: Partial<Product>): Observable<Product> {
+
+  updateProduct(id: string, product: Partial<Product>): Observable<Product> {
     const index = this.products.findIndex(p => p.id === id);
 
     if (index === -1) {
@@ -105,12 +105,72 @@ export class ProductService {
 
     this.products[index] = updatedProduct;
     return of(updatedProduct).pipe(delay(500)); // Simulate network delay
-  } */
+  }
 
-  deleteProduct(id: number): Observable<boolean> {
-    const initialLength = this.products.length;
-    this.products = this.products.filter(p => p.id !== id);
+}
+ */
 
-    return of(this.products.length !== initialLength).pipe(delay(500)); // Simulate network delay
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Category, Product } from '../models/product.model';
+import { tap, catchError } from 'rxjs/operators';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ProductService {
+  private apiUrl = 'http://44.214.111.49/api/productos'; // URL de tu API
+  /* private apiUrl = 'http://127.0.0.1:8000/api/productos'; */
+  public categories: Category[] = [];
+
+  constructor(private http: HttpClient) { }
+
+  public createProduct(product: Product):  Observable<Product> {
+    const payload = {
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      stock: product.stock,
+      frontImage: product.frontImage,
+      aditionalPhotos: product.images,
+      creationDate: product.createdAt
+    };
+
+    console.log('Payload enviado al servidor:', payload);
+
+    return this.http.post<Product>(this.apiUrl, payload).pipe(
+      tap(response => console.log('Respuesta del servidor:', response)),
+      catchError(error => {
+        console.log('Error completo:', error);
+        console.log('Cuerpo del error:', error.error);
+        throw error;
+      })
+    );
+  }
+
+  getProductos(): Observable<Product> {
+    return this.http.get<Product>(this.apiUrl);
+  }
+
+  deleteProduct(id: number): Observable<Product> {
+    return this.http.delete<Product>(`${this.apiUrl}/${id}`);
+  }
+
+  putProduct(id: number | undefined, product: Product): Observable<Product> {
+    return this.http.put<Product>(`${this.apiUrl}/${id}`, product);
+  }
+
+  patchProduct(id: number | undefined, product: Partial<Product>): Observable<Product> {
+    return this.http.patch<Product>(`${this.apiUrl}/${id}`, product);
+  }
+
+  public getCategories(): void {
+    this.categories = [];
+    this.http.get<Category[]>(`${this.apiUrl}/categories`).subscribe({
+      next: (response: Category[]) => {
+        this.categories = response;
+      }
+    });
   }
 }

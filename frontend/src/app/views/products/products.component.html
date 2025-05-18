@@ -9,7 +9,7 @@
         <button class="btn btn-outline filter" (click)="toggleFilters()">
           <i class="bi bi-funnel"></i> Filtros
         </button>
-        @if(isAdmin){
+        @if(isAdmin$ | async ){
         <button class="btn btn-primary" (click)="addProduct()">
           <i class="bi bi-plus-circle"></i> Añadir producto
         </button>
@@ -35,9 +35,17 @@
     <div class="row">
       @for(product of sortedProducts; track $index){
       <div class="col-lg-4 col-md-4 col-sm-12 mb-4">
-        <app-card [id]="product.id" [name]="product.name" [price]="product.price" [description]="product.description"
-          [category]="product.category" [frontImage]="product.frontImage" [images]="product.images"
-          [stock]="product.stock" [sizes]="product.sizes" [colors]="product.colors">
+        <app-card
+        [id]="product.id"
+        [name]="product.name"
+        [price]="product.price"
+        [description]="product.description"
+        [category]="product.category"
+        [frontImage]="product.frontImage"
+        [images]="product.images"
+        [stock]="product.stock"
+        [isAdmin]="(isAdmin$ | async) ?? false"
+        (onEliminar)="deleteProduct(product.id!)">
         </app-card>
       </div>
       }

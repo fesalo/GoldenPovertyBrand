@@ -1,6 +1,5 @@
 <div class="card bg-dark text-light border-secondary">
-  <a [routerLink]="['/producto', id]" class="text-decoration-none text-light"
-    (click)="setProduct({id, name, price, description, category, frontImage, images, sizes, colors, stock})">
+  <a [routerLink]="['/producto', id]" class="text-decoration-none text-light">
     <div class="position-relative">
       <div class="bg-dark border border-secondary rounded-top d-flex align-items-center justify-content-center"
         style="height: 220px;">
@@ -17,12 +16,18 @@
   </a>
   @if(isAdmin){
   <div class="card-footer d-flex justify-content-between">
-    <button class="btn btn-sm btn-outline-warning">
+    <button class="btn btn-sm btn-outline-warning"
+      (click)="updateProduct({id, name, price, description, category, frontImage, images, stock})">
       <i class="bi bi-pencil"></i> Editar
     </button>
-    <button class="btn btn-sm btn-outline-danger">
+    <button class="btn btn-sm btn-outline-danger" (click)="modalDelete()">
       <i class="bi bi-trash"></i> Eliminar
     </button>
   </div>
   }
 </div>
+<app-confirm-modal
+  [showModal]="showConfirmModal"
+  (onConfirm)="deleteProduct()"
+  (onCancel)="notDelete()">
+</app-confirm-modal>

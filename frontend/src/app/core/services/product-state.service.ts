@@ -13,14 +13,11 @@ export class ProductStateService {
     category: 1,
     images: [''],
     frontImage: '',
-    sizes: ['S', 'M'],
-    colors: ['red', 'green'],
     stock: 2,
   };
 
   setProduct(product: Product): void {
     this.selectedProduct = product;
-    console.log(this.selectedProduct)
   }
 
   getProduct(): Product {
@@ -36,8 +33,6 @@ export class ProductStateService {
       category: 1,
       images: [''],
       frontImage: '',
-      sizes: ['S', 'M'],
-      colors: ['red', 'green'],
       stock: 2,
     };
   }

@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 import { ProductService } from '../../../core/services/product.service';
 import { CommonModule } from '@angular/common';
-import { Product } from '../../../core/models/product.model';
+import { Category, Product } from '../../../core/models/product.model';
 
 @Component({
   standalone: true,
@@ -23,12 +23,21 @@ export class CreateProductComponent {
     description: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
     price: new FormControl<number | null>(null),
     stock: new FormControl<number | null>(null),
+    category: new FormControl<number | null>(null),
     frontImage: new FormControl<string | null>(null, { nonNullable: true, validators: [Validators.required] }),
-    additionalPhotos: new FormControl<string[]>([], { nonNullable: true })  // nuevo campo para fotos adicionales
+    additionalPhotos: new FormControl<string[]>([], { nonNullable: true }),
+    creationDate: new FormControl<string>(new Date().toISOString(), { nonNullable: true })
+
   });
 
   public newFoto: string = ''
-  public additionalPhotos: string[] = []; // array para almacenar fotos adicionales en base64
+  public additionalPhotos: string[] = [];
+  categories: Category[] = [
+    { id: 1, name: 'Todos' },
+    { id: 2, name: 'Camisetas' },
+    { id: 3, name: 'Hoodies' },
+    { id: 4, name: 'Accesorios' },
+  ];
 
   constructor(
     private router: Router,
@@ -39,7 +48,6 @@ export class CreateProductComponent {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       if (!multiple) {
-        // Solo 1 foto (frontImage)
         const file = input.files[0];
         const reader = new FileReader();
 
@@ -53,8 +61,7 @@ export class CreateProductComponent {
           console.error('Error al leer la imagen:', error);
         };
       } else {
-        // Fotos adicionales múltiples
-        this.additionalPhotos = []; // limpiamos array
+        this.additionalPhotos = [];
         const files = Array.from(input.files);
         files.forEach((file) => {
           const reader = new FileReader();
@@ -81,15 +88,16 @@ export class CreateProductComponent {
   }
 
   public onSubmit() {
-    /* if (this.productForm.valid) {
+    if (this.productForm.valid) {
       const payload: Product = {
         name: this.productForm.value.name || '',
         description: this.productForm.value.description || '',
         price: Number(this.productForm.value.price) || 0,
         stock: Number(this.productForm.value.stock) || 0,
-        usuario: 1,
-        foto: this.newFoto,
-        additionalPhotos: this.additionalPhotos, // añadimos fotos adicionales al payload
+        category: Number(this.productForm.value.category) || 0,
+        frontImage: this.newFoto,
+        images: this.additionalPhotos,
+        createdAt: this.productForm.value.creationDate
       };
 
       console.log('Enviando payload:', payload);
@@ -106,7 +114,7 @@ export class CreateProductComponent {
           }
         },
       });
-    } */
+    }
   }
 
   public cancelar() {

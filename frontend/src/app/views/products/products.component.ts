@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Product, Category } from '../../core/models/product.model';
 import { CardComponent, FilterComponent } from './components';
 import { ProductStateService } from '../../core/services/product-state.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ProductService } from '../../core/services/product.service';
+import { AuthService } from '../../core/services/auth.service';
+import { CommonModule } from '@angular/common';
 
 interface SortOption {
   id: number;
@@ -14,17 +16,22 @@ interface SortOption {
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CardComponent, FilterComponent],
+  imports: [CardComponent, FilterComponent, CommonModule],
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css']
 })
-export class ProductsComponent {
+export class ProductsComponent implements OnInit {
 
-  /* public isAdmin$!: Observable<boolean>; */
-  public isAdmin: boolean = true;
+  public isAdmin$!: Observable<boolean>;
 
+  constructor(private router: Router, public service: ProductService, public authService: AuthService) { }
 
-  constructor(private router: Router, public service: ProductService) { }
+   ngOnInit(): void {
+      this.isAdmin$ = this.authService.isAdmin$;
+    this.isAdmin$.subscribe(isAdmin => {
+      console.log('Estado de admin:', isAdmin);
+    });
+  }
 
   products: Product[] = [
     {
@@ -35,8 +42,6 @@ export class ProductsComponent {
       category: 1,
       images: [''],
       frontImage: '',
-      sizes: ['S', 'M'],
-      colors: ['red', 'green'],
       stock: 2,
     },
     {
@@ -47,8 +52,6 @@ export class ProductsComponent {
       category: 2,
       images: [''],
       frontImage: '',
-      sizes: ['M', 'L'],
-      colors: ['blue', 'black'],
       stock: 5,
     },
     {
@@ -59,8 +62,6 @@ export class ProductsComponent {
       category: 1,
       images: [''],
       frontImage: '',
-      sizes: ['L', 'XL'],
-      colors: ['gray', 'navy'],
       stock: 3,
     },
     {
@@ -71,8 +72,6 @@ export class ProductsComponent {
       category: 3,
       images: [''],
       frontImage: '',
-      sizes: ['S', 'M', 'L'],
-      colors: ['yellow', 'pink'],
       stock: 4,
     },
     {
@@ -83,8 +82,6 @@ export class ProductsComponent {
       category: 4,
       images: [''],
       frontImage: '',
-      sizes: ['38', '39', '40'],
-      colors: ['white', 'black'],
       stock: 6,
     }
   ];
@@ -123,8 +120,6 @@ export class ProductsComponent {
     return filtered;
   }
 
-
-
   get sortedProducts(): Product[] {
     return [...this.filteredProducts].sort((a, b) => {
       switch (this.sortOption) {
@@ -137,7 +132,7 @@ export class ProductsComponent {
         case 4:
           return b.name.localeCompare(a.name);
         default:
-          return b.id - a.id;
+          return b.price - a.price;
       }
     });
   }

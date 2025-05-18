@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ProductsComponent } from '../products/products.component';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
