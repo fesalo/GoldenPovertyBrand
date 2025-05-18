@@ -1,49 +1,34 @@
-<section id="news" class="py-5 px-4 sm:px-6 lg:px-8 bg-light">
+<section id="news" class="py-5 px-4 sm:px-6 lg:px-8 bg-light mt-5">
   <div class="container">
     <div class="text-center mb-5">
-      <h2 class="h3 font-weight-bold text-dark mb-2">Latest News</h2>
+      <h2 class="h3 font-weight-bold text-dark mb-2">Novedades musicales</h2>
       <p class="text-muted max-w-2xl mx-auto">
-        Stay updated with the latest trends, collections, and fashion insights from our blog.
+        Aquí te traemos las novedades musicales de la música urbana y electrónica de los artistas que pertenecen a la
+        familia Golden.
       </p>
     </div>
 
+     @if(isAdmin$ | async){
+        <button class="btn btn-primary mb-3" (click)="addMusicNew()">
+          <i class="bi bi-plus-circle"></i> Añadir noticia
+        </button>
+        }
+
     <div class="row row-cols-1 row-cols-md-3 g-4">
-      @for ( news of newsItems; track news.id) {
-        <div class="col">
-          <div class="card h-100 shadow-sm hover-shadow-md">
-            <div class="aspect-ratio-16-9 bg-secondary position-relative">
-              <div class="position-absolute top-0 start-0 bottom-0 end-0 d-flex justify-content-center align-items-center text-white">
-                News Image Placeholder
-              </div>
-            </div>
-            <div class="card-body">
-              <div class="d-flex text-muted mb-3">
-                <div class="d-flex align-items-center me-4">
-                  <i class="bi bi-calendar h-4 w-4 me-1"></i>
-                  <!-- <span>{{ news.date | date: 'shortDate' }}</span> -->
-                </div>
-                <div class="d-flex align-items-center">
-                  <i class="bi bi-chat-square h-4 w-4 me-1"></i>
-                  <span>{{ news.comments }} Comments</span>
-                </div>
-              </div>
-              <h3 class="h5 font-weight-semibold text-dark mb-2" style="line-clamp: 2">
-                {{ news.title }}
-              </h3>
-              <p class="text-muted mb-4" style="line-clamp: 3">
-                {{ news.excerpt }}
-              </p>
-              <a [routerLink]="'#news-' + news.id" class="text-primary font-medium d-inline-flex align-items-center hover:text-primary">
-                Read More <i class="bi bi-arrow-right ml-1 h-4 w-4"></i>
-              </a>
-            </div>
-          </div>
-        </div>
+      @for ( new of news; track $index) {
+      <app-card
+      [id]="new.id"
+      [title]="new.title"
+      [content]="new.content"
+      [imageUrl]="new.imageUrl"
+      [createdAt]="new.createdAt"
+      [musicUrl]="new.musicUrl"
+      [releaseDate]="new.releaseDate"
+      [isAdmin]="(isAdmin$ | async) ?? false"
+      >
+      </app-card>
       }
     </div>
 
-    <div class="mt-4 text-center">
-      <a href="#all-news" class="btn btn-outline-primary px-4 py-2">View All News</a>
-    </div>
   </div>
 </section>

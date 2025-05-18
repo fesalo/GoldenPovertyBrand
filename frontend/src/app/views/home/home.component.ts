@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
+import { ProductsComponent } from '../products/products.component';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [],
+  imports: [ProductsComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

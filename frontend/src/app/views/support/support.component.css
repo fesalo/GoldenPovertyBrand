@@ -1,8 +1,19 @@
-/* Opcional: personalización adicional */
-section#contact {
+section{
   background-color: #ffffff;
 }
 
 textarea {
   resize: none;
+}
+
+.btn-primary {
+  background-color: #d4b163 !important;
+  border: none;
+  color: #ffffff;
+  font-weight: 600;
+  transition: background-color 0.3sease;
+}
+
+.btn-primary:hover {
+  background-color: #957635;
 }

@@ -1,0 +1,62 @@
+<button class="btn text-light" [ngStyle]="{ 'background-color': isLoggedIn ? '#ff1414' : '#CCAB62' }"
+  (click)="isLoggedIn ? logout() : openModal()">
+  {{ isLoggedIn ? 'Log out' : 'Log in' }}
+</button>
+
+<div class="modal fade" style="background: rgba(0, 0, 0, 0.5)" id="registroModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" style="border-color: #CCAB62; border-width: 5px">
+      <div class="modal-header">
+        <h4 class="modal-title text-center w-100" id="registroModalLabel">
+          Inicio <em style="color: #CCAB62">Sesion</em>
+        </h4>
+        <button type="button" class="btn-close" (click)="closeModal()" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <form (submit)="login($event)">
+          <div class="mb-3">
+            <label for="emailOrUsername" class="form-label">Correo electrónico o Nombre de Usuario</label>
+            <input type="text" class="form-control" id="emailOrUsername" [ngClass]="{
+                'is-invalid': invalidUser || !this.emailOrUsername
+              }" [(ngModel)]="emailOrUsername" name="emailOrUsername" placeholder="usuario@example.com o usuario123"
+              required />
+            @if (!this.emailOrUsername) {
+            <div class="invalid-feedback">
+              Este campo es obligatorio.
+            </div>
+            }
+
+            @if (invalidUser) {
+            <div class="invalid-feedback">
+              Usuario no encontrado. Verifica tu correo electrónico o nombre de usuario.
+            </div>
+            }
+
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="password"
+              [ngClass]="{ 'is-invalid': invalidPassword || !this.password }" [(ngModel)]="password" name="password"
+              placeholder="Ingresa tu contraseña" required />
+            @if (!this.password) {
+            <div class="invalid-feedback">
+              Este campo es obligatorio.
+            </div>
+            }
+
+            @if (invalidPassword) {
+            <div class="invalid-feedback">
+              La contraseña es incorrecta. Inténtalo de nuevo.
+            </div>
+            }
+
+          </div>
+          <button type="submit" class="btn" (mouseenter)="hover = true" (mouseleave)="hover = false"
+            [ngStyle]="{ 'background-color': hover ? '#f2f3f4' : '#CCAB62' }">
+            <span class="text-light" [ngStyle]="{ color: hover ? '#CCAB62' : '#000000' }">Iniciar Sesión</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
