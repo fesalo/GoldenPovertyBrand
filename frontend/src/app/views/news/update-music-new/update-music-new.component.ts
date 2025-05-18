@@ -13,7 +13,7 @@ import { MusicNew } from '../../../core/models/music-new.model';
   styleUrl: './update-music-new.component.css'
 })
 export class UpdateMusicNewComponent implements OnInit {
-  public newId?: string = '';
+  public newId: string | undefined = '';
 
   newForm = new FormGroup({
     title: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
@@ -89,7 +89,7 @@ export class UpdateMusicNewComponent implements OnInit {
 
     console.log(payload);
 
-    this.service.postNew(payload).subscribe({
+    this.service.patchNew(this.newId, payload).subscribe({
       next: (response) => {
         console.log('new creada', response);
         this.router.navigate(['/news']);

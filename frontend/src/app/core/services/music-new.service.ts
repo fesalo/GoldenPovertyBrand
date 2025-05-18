@@ -22,11 +22,11 @@ export class MusicNewService {
     return this.http.get<MusicNew[]>(this.apiUrl);
   }
 
-  public putNew(id: string, noticia: MusicNew): Observable<MusicNew> {
+  public putNew(id: string | undefined, noticia: MusicNew): Observable<MusicNew> {
     return this.http.put<MusicNew>(`${this.apiUrl}/${id}`, noticia);
   }
 
-  public patchNew(id: string, noticia: Partial<MusicNew>): Observable<MusicNew> {
+  public patchNew(id: string | undefined, noticia: Partial<MusicNew>): Observable<MusicNew> {
     return this.http.patch<MusicNew>(`${this.apiUrl}/${id}`, noticia);
   }
 
