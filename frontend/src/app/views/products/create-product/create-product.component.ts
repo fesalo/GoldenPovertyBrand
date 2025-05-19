@@ -21,16 +21,15 @@ export class CreateProductComponent {
   productForm = new FormGroup({
     name: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
     description: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
-    price: new FormControl<number | null>(null),
-    stock: new FormControl<number | null>(null),
-    category: new FormControl<number | null>(null),
+    price: new FormControl<number | null>(null, { validators: [Validators.required] }),
+    stock: new FormControl<number | null>(null, { validators: [Validators.required] }),
+    category: new FormControl<number | null>(null, { validators: [Validators.required] }),
     frontImage: new FormControl<string | null>(null, { nonNullable: true, validators: [Validators.required] }),
-    additionalPhotos: new FormControl<string[]>([], { nonNullable: true }),
     creationDate: new FormControl<string>(new Date().toISOString(), { nonNullable: true })
 
   });
 
-  public newFoto: string = ''
+
   public additionalPhotos: string[] = [];
   categories: Category[] = [
     { id: 1, name: 'Todos' },
@@ -44,47 +43,24 @@ export class CreateProductComponent {
     private productService: ProductService
   ) { }
 
-  public onFileChange(event: Event, multiple: boolean = false) {
+  public newFoto: string = ''
+
+  public onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      if (!multiple) {
-        const file = input.files[0];
-        const reader = new FileReader();
+      const file = input.files[0];
+      const reader = new FileReader();
 
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-          const base64String = reader.result as string;
-          this.newFoto = base64String.split(',')[1];
-          this.productForm.controls['frontImage'].setValue(this.newFoto);
-        };
-        reader.onerror = (error) => {
-          console.error('Error al leer la imagen:', error);
-        };
-      } else {
-        this.additionalPhotos = [];
-        const files = Array.from(input.files);
-        files.forEach((file) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = () => {
-            const base64String = reader.result as string;
-            this.additionalPhotos.push(base64String.split(',')[1]);
-            this.productForm.controls['additionalPhotos'].setValue(this.additionalPhotos);
-          };
-          reader.onerror = (error) => {
-            console.error('Error al leer la imagen:', error);
-          };
-        });
-      }
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const base64String = reader.result as string;
+        this.newFoto = base64String.split(',')[1]
+        this.productForm.get('frontImage')?.setValue(this.newFoto);
+      };
+      reader.onerror = (error) => {
+        console.error('Error al leer la imagen:', error);
+      };
     }
-  }
-
-  public removeAdditionalPhoto(index: number) {
-
-    this.additionalPhotos.splice(index, 1);
-
-    this.productForm.controls['additionalPhotos'].setValue(this.additionalPhotos);
-
   }
 
   public onSubmit() {
@@ -96,16 +72,14 @@ export class CreateProductComponent {
         stock: Number(this.productForm.value.stock) || 0,
         category: Number(this.productForm.value.category) || 0,
         frontImage: this.newFoto,
-        images: this.additionalPhotos,
-        createdAt: this.productForm.value.creationDate
+        creationDate: this.productForm.value.creationDate
       };
-
-      console.log('Enviando payload:', payload);
+      console.log('Payload enviado:', payload);
 
       this.productService.createProduct(payload).subscribe({
         next: (response) => {
           console.log('Producto creado:', response);
-          this.router.navigate(['/productos']);
+          this.router.navigate(['/home']);
         },
         error: (error) => {
           console.error('Error al crear producto:', error);

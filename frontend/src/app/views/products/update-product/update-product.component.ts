@@ -15,48 +15,51 @@ import { HttpClient } from '@angular/common/http';
 })
 export class UpdateProductComponent implements OnInit {
   productForm = new FormGroup({
-    name: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
-    description: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
+    name: new FormControl<string>('', { nonNullable: true }),
+    description: new FormControl<string>('', { nonNullable: true }),
     price: new FormControl<number | null>(null),
     stock: new FormControl<number | null>(null),
     category: new FormControl<number | null>(null),
-    frontImage: new FormControl<string | null>(null, { nonNullable: true, validators: [Validators.required] }),
-    additionalPhotos: new FormControl<string[] | undefined>([], { nonNullable: true }),
+    frontImage: new FormControl<string | null>(null),
   });
 
+   public apiUrl: string = 'http://127.0.0.1:8000';
   public productoId: number | undefined = 0;
   public newFoto: string = '';
-  public additionalPhotos: string[] = [];
-  categories: Category[] = [
-    { id: 1, name: 'Todos' },
-    { id: 2, name: 'Camisetas' },
-    { id: 3, name: 'Hoodies' },
-    { id: 4, name: 'Accesorios' },
-  ];
+  public categories: Category[] = [];
+  public product: Product = {
+  name: '',
+  description: '',
+  price: 0,
+  stock: 0,
+  category: 0,
+  frontImage: '',
+  creationDate: ''
+};
 
   constructor(
     private router: Router,
-    public productosService: ProductService,
+    public service: ProductService,
     public stateService: ProductStateService,
     private route: ActivatedRoute,
     private http: HttpClient
   ) { }
 
   public ngOnInit(): void {
-    let product: Product = this.stateService.getProduct();
-    if (product) {
+    this.getCategories();
+    this.product = this.stateService.getProduct();
+    if (this.product) {
       this.productForm.setValue({
-        name: product.name,
-        description: product.description,
-        price: product.price ?? 0,
-        stock: product.stock ?? 0,
-        category: product.category,
+        name: this.product.name,
+        description: this.product.description,
+        price: this.product.price ?? 0,
+        stock: this.product.stock ?? 0,
+        category: this.product.category,
         frontImage: null,
-        additionalPhotos: product.images,
       });
-      this.productoId = product.id;
+      this.productoId = this.product.id;
 
-      this.productoId = product.id;
+      this.productoId = this.product.id;
     } else {
       this.productForm.setValue({
         name: 'Título de ejemplo',
@@ -65,52 +68,34 @@ export class UpdateProductComponent implements OnInit {
         stock: 0,
         category: 0,
         frontImage: null,
-        additionalPhotos: undefined,
       });
     }
   }
 
-  public onFileChange(event: Event, multiple: boolean = false) {
+  public onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      if (!multiple) {
-        const file = input.files[0];
-        const reader = new FileReader();
 
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-          const base64String = reader.result as string;
-          this.newFoto = base64String.split(',')[1];
-          this.productForm.controls['frontImage'].setValue(this.newFoto);
-        };
-        reader.onerror = (error) => {
-          console.error('Error al leer la imagen:', error);
-        };
-      } else {
-        this.additionalPhotos = [];
-        const files = Array.from(input.files);
-        files.forEach((file) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = () => {
-            const base64String = reader.result as string;
-            this.additionalPhotos.push(base64String.split(',')[1]);
-            this.productForm.controls['additionalPhotos'].setValue(this.additionalPhotos);
-          };
-          reader.onerror = (error) => {
-            console.error('Error al leer la imagen:', error);
-          };
-        });
+      const file = input.files[0];
+      const reader = new FileReader();
+
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const base64String = reader.result as string;
+        this.newFoto = base64String.split(',')[1];
+        this.productForm.controls['frontImage'].setValue(this.newFoto);
+      };
+      reader.onerror = (error) => {
+        console.error('Error al leer la imagen:', error);
       }
     }
   }
 
-  public removeAdditionalPhoto(index: number) {
-
-    this.additionalPhotos.splice(index, 1);
-
-    this.productForm.controls['additionalPhotos'].setValue(this.additionalPhotos);
-
+  public getCategories(): void {
+    this.categories = []
+    this.service.getCategories().subscribe((response) => {
+      this.categories = response
+    });
   }
 
   public onSubmit(): void {
@@ -121,9 +106,7 @@ export class UpdateProductComponent implements OnInit {
     const description = rawValue.description || product.description;
     const price = rawValue.price !== null ? Number(rawValue.price) : product.price;
     const stock = rawValue.stock !== null ? Number(rawValue.stock) : product.stock;
-    const category = rawValue.category || product.category;
-    const additionalPhotos = rawValue.additionalPhotos || product.images;
-
+    const category = rawValue.category || product.category
 
     const payload: Product = {
       name: name,
@@ -132,7 +115,6 @@ export class UpdateProductComponent implements OnInit {
       stock: stock,
       category: category,
       frontImage: this.newFoto,
-      images: additionalPhotos,
     };
 
     const changes: Partial<Product> = {};
@@ -153,23 +135,27 @@ export class UpdateProductComponent implements OnInit {
       changes.stock = Number(rawValue.stock);
     }
 
+    if (rawValue.category !== null && Number(rawValue.category) !== product.category) {
+      changes.category = Number(rawValue.category);
+    }
+
     if (this.newFoto) {
       changes.frontImage = this.newFoto;
     }
 
     if (Object.keys(changes).length === Object.keys(product).length) {
-      this.productosService.putProduct(this.productoId, payload).subscribe({
+      this.service.putProduct(this.productoId, payload).subscribe({
         next: response => {
           console.log('Producto actualizado completamente', response);
-          this.router.navigate(['/productos']);
+          this.router.navigate(['/home']);
         },
         error: error => console.error('Error al actualizar product', error)
       });
     } else if (Object.keys(changes).length > 0) {
-      this.productosService.patchProduct(this.productoId, changes).subscribe({
+      this.service.patchProduct(this.productoId, changes).subscribe({
         next: response => {
           console.log('Producto actualizado parcialmente', response);
-          this.router.navigate(['/productos']);
+          this.router.navigate(['/home']);
         },
         error: error => console.error('Error al actualizar product', error)
       });

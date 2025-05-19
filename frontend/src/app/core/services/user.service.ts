@@ -9,7 +9,7 @@ import { User } from '../models/user.model';
 export class UserService {
   constructor(public http: HttpClient) {}
 
-  private apiUrl = 'http://44.214.111.49/api/usuarios';
+  private apiUrl = 'http://127.0.0.1:8000/api/user';
 
   public getUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.apiUrl);

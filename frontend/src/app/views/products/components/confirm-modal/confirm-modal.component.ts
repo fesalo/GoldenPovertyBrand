@@ -7,7 +7,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./confirm-modal.component.css']
 })
 export class ConfirmModalComponent {
-  @Input() 
+  @Input()
   set showModal(value: boolean) {
     this._showModal = value;
     if (value) {
@@ -24,11 +24,11 @@ export class ConfirmModalComponent {
   @Output() onConfirm = new EventEmitter<void>();
   @Output() onCancel = new EventEmitter<void>();
 
-  confirm() {
+  public confirm() {
     this.onConfirm.emit();
   }
 
-  cancel() {
+  public cancel() {
     this.onCancel.emit();
   }
-} 
+}

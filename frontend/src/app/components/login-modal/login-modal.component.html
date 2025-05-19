@@ -38,7 +38,7 @@
             <input type="password" class="form-control" id="password"
               [ngClass]="{ 'is-invalid': invalidPassword || !this.password }" [(ngModel)]="password" name="password"
               placeholder="Ingresa tu contraseña" required />
-            @if (!this.password) {
+            @if (!password) {
             <div class="invalid-feedback">
               Este campo es obligatorio.
             </div>
@@ -51,9 +51,8 @@
             }
 
           </div>
-          <button type="submit" class="btn" (mouseenter)="hover = true" (mouseleave)="hover = false"
-            [ngStyle]="{ 'background-color': hover ? '#f2f3f4' : '#CCAB62' }">
-            <span class="text-light" [ngStyle]="{ color: hover ? '#CCAB62' : '#000000' }">Iniciar Sesión</span>
+          <button type="submit" class="btn">
+            <span class="text-light" >Iniciar Sesión</span>
           </button>
         </form>
       </div>

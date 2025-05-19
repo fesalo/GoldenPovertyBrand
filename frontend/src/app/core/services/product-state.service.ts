@@ -11,7 +11,6 @@ export class ProductStateService {
     price: 29.99,
     description: 'Comfortable cotton t-shirt for everyday wear',
     category: 1,
-    images: [''],
     frontImage: '',
     stock: 2,
   };
@@ -31,7 +30,6 @@ export class ProductStateService {
       price: 29.99,
       description: 'Comfortable cotton t-shirt for everyday wear',
       category: 1,
-      images: [''],
       frontImage: '',
       stock: 2,
     };

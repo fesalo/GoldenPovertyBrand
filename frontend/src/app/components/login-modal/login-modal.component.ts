@@ -13,15 +13,15 @@ import { UserService } from '../../core/services/user.service';
   styleUrl: './login-modal.component.css',
 })
 export class LoginModalComponent {
-  emailOrUsername: string = '';
-  password: string = '';
+  public emailOrUsername: string = '';
+  public password: string = '';
 
-  invalidUser: boolean = false;
-  invalidPassword: boolean = false;
-  isLoggedIn: boolean = false;
+  public invalidUser: boolean = false;
+  public invalidPassword: boolean = false;
+  public isLoggedIn: boolean = false;
 
   constructor(
-    private usuariosService: UserService,
+    private userService: UserService,
     private authService: AuthService
   ) {
     this.authService.isLoggedIn$.subscribe((loggedIn) => {
@@ -29,7 +29,7 @@ export class LoginModalComponent {
     });
   }
 
-  openModal() {
+  public openModal() {
     const modal = document.getElementById('registroModal');
     if (modal) {
       modal.classList.add('show');
@@ -38,7 +38,7 @@ export class LoginModalComponent {
     }
   }
 
-  closeModal() {
+  public closeModal() {
     const modal = document.getElementById('registroModal');
     if (modal) {
       modal.classList.remove('show');
@@ -47,7 +47,7 @@ export class LoginModalComponent {
     }
   }
 
-  login(event: Event) {
+  public login(event: Event) {
     event.preventDefault();
 
     this.invalidUser = false;
@@ -55,11 +55,11 @@ export class LoginModalComponent {
 
     if (!this.emailOrUsername || !this.password) return;
 
-    this.usuariosService.getUsers().subscribe((users) => {
-  const user = users.find(
-    (u) =>
-      u.email === this.emailOrUsername || u.username === this.emailOrUsername
-  );
+    this.userService.getUsers().subscribe((users) => {
+      const user = users.find(
+        (u) =>
+          u.email === this.emailOrUsername || u.userName === this.emailOrUsername
+      );
 
       if (!user) {
         this.invalidUser = true; // Marcar usuario como inválido
@@ -70,6 +70,7 @@ export class LoginModalComponent {
         this.invalidPassword = true; // Marcar contraseña como inválida
         return;
       }
+      this.authService.login(user.isAdmin);
 
       this.closeModal();
       this.emailOrUsername = '';
@@ -77,10 +78,9 @@ export class LoginModalComponent {
     });
   }
 
-  logout() {
+  public logout() {
     this.authService.logout();
     alert('Sesión cerrada');
   }
 
-  hover = false;
 }

@@ -42,10 +42,9 @@
         [description]="product.description"
         [category]="product.category"
         [frontImage]="product.frontImage"
-        [images]="product.images"
         [stock]="product.stock"
         [isAdmin]="(isAdmin$ | async) ?? false"
-        (onEliminar)="deleteProduct(product.id!)">
+        (onDelete)="deleteProduct(product.id!)">
         </app-card>
       </div>
       }

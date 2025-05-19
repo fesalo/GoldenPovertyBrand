@@ -13,7 +13,8 @@ import { MusicNewStateService } from '../../../../core/services/music-new-state.
 export class CardComponent {
 
   constructor(private router: Router, private service: MusicNewStateService) { }
-  showConfirmModal: boolean = false;
+  public showConfirmModal: boolean = false;
+  public apiUrl: string = 'http://127.0.0.1:8000'
 
   @Input() id?: string = '';
   @Input() title: string = '';

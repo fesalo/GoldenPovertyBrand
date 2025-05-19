@@ -1,7 +1,7 @@
 /* import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { Product, ProductFilter } from '../models/product.model';
+import { Product, ProductFilter, Category } from '../models/product.model';
 
 @Injectable({
   providedIn: 'root'
@@ -120,8 +120,8 @@ import { tap, catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ProductService {
-  private apiUrl = 'http://44.214.111.49/api/productos'; // URL de tu API
-  /* private apiUrl = 'http://127.0.0.1:8000/api/productos'; */
+  private apiUrl = 'http://127.0.0.1:8000/api/product';
+  private categoryUrl: string = 'http://127.0.0.1:8000/api';
   public categories: Category[] = [];
 
   constructor(private http: HttpClient) { }
@@ -133,8 +133,8 @@ export class ProductService {
       price: product.price,
       stock: product.stock,
       frontImage: product.frontImage,
-      aditionalPhotos: product.images,
-      creationDate: product.createdAt
+      creationDate: product.creationDate,
+      category: product.category
     };
 
     console.log('Payload enviado al servidor:', payload);
@@ -149,28 +149,23 @@ export class ProductService {
     );
   }
 
-  getProductos(): Observable<Product> {
-    return this.http.get<Product>(this.apiUrl);
+  public getProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(this.apiUrl);
   }
 
-  deleteProduct(id: number): Observable<Product> {
+  public deleteProduct(id: number): Observable<Product> {
     return this.http.delete<Product>(`${this.apiUrl}/${id}`);
   }
 
-  putProduct(id: number | undefined, product: Product): Observable<Product> {
+  public putProduct(id: number | undefined, product: Product): Observable<Product> {
     return this.http.put<Product>(`${this.apiUrl}/${id}`, product);
   }
 
-  patchProduct(id: number | undefined, product: Partial<Product>): Observable<Product> {
+  public patchProduct(id: number | undefined, product: Partial<Product>): Observable<Product> {
     return this.http.patch<Product>(`${this.apiUrl}/${id}`, product);
   }
 
-  public getCategories(): void {
-    this.categories = [];
-    this.http.get<Category[]>(`${this.apiUrl}/categories`).subscribe({
-      next: (response: Category[]) => {
-        this.categories = response;
-      }
-    });
+  public getCategories(): Observable<Category[]>{
+    return this.http.get<Category[]>(`${this.categoryUrl}/category`);
   }
 }

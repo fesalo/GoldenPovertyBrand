@@ -23,75 +23,19 @@ interface SortOption {
 export class ProductsComponent implements OnInit {
 
   public isAdmin$!: Observable<boolean>;
+  public categories: Category[] = []
 
   constructor(private router: Router, public service: ProductService, public authService: AuthService) { }
 
-   ngOnInit(): void {
-      this.isAdmin$ = this.authService.isAdmin$;
+  ngOnInit(): void {
+    this.getCategories();
+    this.getProducts();
+    this.isAdmin$ = this.authService.isAdmin$;
     this.isAdmin$.subscribe(isAdmin => {
-      console.log('Estado de admin:', isAdmin);
     });
   }
 
-  products: Product[] = [
-    {
-      id: 1,
-      name: 'Classic T-Shirt',
-      price: 29.99,
-      description: 'Comfortable cotton t-shirt for everyday wear',
-      category: 1,
-      images: [''],
-      frontImage: '',
-      stock: 2,
-    },
-    {
-      id: 2,
-      name: 'Slim Fit Jeans',
-      price: 49.99,
-      description: 'Stylish slim fit jeans with stretchable fabric',
-      category: 2,
-      images: [''],
-      frontImage: '',
-      stock: 5,
-    },
-    {
-      id: 3,
-      name: 'Hooded Sweatshirt',
-      price: 39.99,
-      description: 'Warm and cozy hoodie for cool weather',
-      category: 1,
-      images: [''],
-      frontImage: '',
-      stock: 3,
-    },
-    {
-      id: 4,
-      name: 'Summer Dress',
-      price: 34.99,
-      description: 'Lightweight dress perfect for summer days',
-      category: 3,
-      images: [''],
-      frontImage: '',
-      stock: 4,
-    },
-    {
-      id: 5,
-      name: 'Running Shoes',
-      price: 59.99,
-      description: 'Comfortable and durable shoes for running',
-      category: 4,
-      images: [''],
-      frontImage: '',
-      stock: 6,
-    }
-  ];
-
-  categories: Category[] = [
-    { id: 0, name: 'Todos' },
-    { id: 1, name: 'Camisetas' },
-    { id: 2, name: 'Hoodies' },
-    { id: 3, name: 'Accesorios' },
-  ];
+  products: Product[] = [];
 
   sortOptions: SortOption[] = [
     { id: 1, name: 'Price: Low to High' },
@@ -157,6 +101,20 @@ export class ProductsComponent implements OnInit {
 
   public addProduct(): void {
     this.router.navigate(['/create-product']);
+  }
+
+  public getCategories(): void {
+    this.categories = []
+    this.service.getCategories().subscribe((response) => {
+      this.categories = response
+    });
+  }
+
+  public getProducts(): void {
+    this.products = []
+    this.service.getProducts().subscribe((response) => {
+      this.products = response
+    });
   }
 
   public deleteProduct(id: number): void {

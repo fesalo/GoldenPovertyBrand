@@ -2,13 +2,12 @@
   <a [routerLink]="['/producto', id]" class="text-decoration-none text-light">
     <div class="position-relative">
       <div class="bg-dark border border-secondary rounded-top d-flex align-items-center justify-content-center"
-        style="height: 220px;">
-        <span class="text-muted">Imagen del producto</span>
+        style="height: 220px;" [ngStyle]="{ 'background-image': 'url(' +apiUrl + frontImage + ')', 'background-size': 'cover' }">
       </div>
       <div class="card-body">
         <h5 class="card-title d-flex justify-content-between align-items-center">
           <span class="fw-semibold">{{ name }}</span>
-          <span class="text-highlight">€{{ price.toFixed(2) }}</span>
+          <span class="text-highlight">€{{ price }}</span>
         </h5>
         <p class="card-text text-muted small">{{ description }}</p>
       </div>
@@ -17,7 +16,7 @@
   @if(isAdmin){
   <div class="card-footer d-flex justify-content-between">
     <button class="btn btn-sm btn-outline-warning"
-      (click)="updateProduct({id, name, price, description, category, frontImage, images, stock})">
+      (click)="updateProduct({id, name, price, description, category, frontImage, stock})">
       <i class="bi bi-pencil"></i> Editar
     </button>
     <button class="btn btn-sm btn-outline-danger" (click)="modalDelete()">

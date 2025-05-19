@@ -4,13 +4,10 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ProductRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
-#[ApiResource]
 class Product
 {
     #[ORM\Id]
@@ -33,24 +30,12 @@ class Product
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $creationDate = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $frontImage = null;
+
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?category $category = null;
-
-    /**
-     * @var Collection<int, Image>
-     */
-    #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'product')]
-    private Collection $images;
-
-    #[ORM\ManyToOne]
-    private ?image $frontImage = null;
-
-
-    public function __construct()
-    {
-        $this->images = new ArrayCollection();
-    }
+    private ?Category $category = null;
 
     public function getId(): ?int
     {
@@ -65,7 +50,6 @@ class Product
     public function setName(string $name): static
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -77,7 +61,6 @@ class Product
     public function setPrice(string $price): static
     {
         $this->price = $price;
-
         return $this;
     }
 
@@ -89,7 +72,6 @@ class Product
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
         return $this;
     }
 
@@ -101,7 +83,6 @@ class Product
     public function setStock(int $stock): static
     {
         $this->stock = $stock;
-
         return $this;
     }
 
@@ -113,61 +94,28 @@ class Product
     public function setCreationDate(\DateTime $creationDate): static
     {
         $this->creationDate = $creationDate;
-
         return $this;
     }
 
-    public function getCategory(): ?category
+    public function getCategory(): ?Category
     {
         return $this->category;
     }
 
-    public function setCategory(?category $category): static
+    public function setCategory(?Category $category): static
     {
         $this->category = $category;
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, Image>
-     */
-    public function getImages(): Collection
-    {
-        return $this->images;
-    }
-
-    public function addImage(Image $image): static
-    {
-        if (!$this->images->contains($image)) {
-            $this->images->add($image);
-            $image->setProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeImage(Image $image): static
-    {
-        if ($this->images->removeElement($image)) {
-            // set the owning side to null (unless already changed)
-            if ($image->getProduct() === $this) {
-                $image->setProduct(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getFrontImage(): ?image
+    public function getFrontImage(): ?string
     {
         return $this->frontImage;
     }
 
-    public function setFrontImage(?image $frontImage): static
+    public function setFrontImage(?string $frontImage): static
     {
         $this->frontImage = $frontImage;
-
         return $this;
     }
 

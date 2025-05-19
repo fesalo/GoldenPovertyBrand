@@ -48,9 +48,7 @@ export class NewsComponent {
   ];
 
   constructor(private router: Router, private authService: AuthService, public service: MusicNewService) {
-    /*  this.isAdmin$ = this.authService.isAdmin$;
-     console.log(this.authService) */
-    /* this.isAdmin$ = of(true) */
+     this.isAdmin$ = this.authService.isAdmin$;
   }
 
   public getNews(): void {

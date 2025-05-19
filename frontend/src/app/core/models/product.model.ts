@@ -4,10 +4,9 @@ export interface Product {
   description: string;
   price: number;
   category: number;
-  images?: string[];
   frontImage:string;
   stock: number;
-  createdAt?: string;
+  creationDate?: string;
 }
 
 export interface Category {
@@ -20,6 +19,6 @@ export interface ProductFilter {
   minPrice?: number;
   maxPrice?: number;
   search?: string;
-  sortBy?: 'price' | 'createdAt' | 'popularity';
+  sortBy?: 'price' | 'creationDate' | 'popularity';
   sortDirection?: 'asc' | 'desc';
 }
